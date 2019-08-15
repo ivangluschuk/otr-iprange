@@ -1,9 +1,9 @@
-package main.java.iprange;
+package iprange;
 
 public class Application {
 
     public static void main(String[] args) {
 
-        new TerminalProvider().start();
+        new TerminalManager().start();
     }
 }

@@ -1,8 +1,8 @@
-package main.java.iprange;
+package iprange;
 
 import java.util.Scanner;
 
-final class TerminalProvider {
+final class TerminalManager {
 
     private String firstIpAddress;
     private String secondIpAddress;
@@ -16,38 +16,40 @@ final class TerminalProvider {
 
     private void getFirstIpAddress() {
 
+        System.out.println("To exit the program enter \"exit\"");
         System.out.println("Enter the first ip address:");
         System.out.print(">");
 
         Scanner scanner = new Scanner(System.in);
         var input = scanner.nextLine();
 
-        try {
-            ipAddressValidator.validate(input);
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+        if (input.equals("exit")) System.exit(0);
+
+        if (ipAddressValidator.validate(input)) {
+            firstIpAddress = input;
+        } else {
+            System.out.println("The ip address has a wrong format: " + input);
             start();
         }
-
-        firstIpAddress = input;
     }
 
     private void getSecondIpAddress() {
 
-        System.out.println("Enter the second ip address:");
+        System.out.println("To exit the program enter \"exit\"");
+        System.out.println("Enter the first ip address:");
         System.out.print(">");
 
         Scanner scanner = new Scanner(System.in);
         var input = scanner.nextLine();
 
-        try {
-            ipAddressValidator.validate(input);
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+        if (input.equals("exit")) System.exit(0);
+
+        if (ipAddressValidator.validate(input)) {
+            secondIpAddress = input;
+        } else {
+            System.out.println("The ip address has a wrong format: " + input);
             start();
         }
-
-        secondIpAddress = input;
     }
 
     private void printIpAddresses() {

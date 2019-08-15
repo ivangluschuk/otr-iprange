@@ -1,4 +1,4 @@
-package main.java.iprange;
+package iprange;
 
 import java.util.ArrayList;
 import java.util.Arrays;

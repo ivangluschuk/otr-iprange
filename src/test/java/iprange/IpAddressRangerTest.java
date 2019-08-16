@@ -1,9 +1,10 @@
 package iprange;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
+
+import static org.junit.Assert.*;
 
 public class IpAddressRangerTest {
 
@@ -12,13 +13,13 @@ public class IpAddressRangerTest {
     @Test
     public void initializeRangeSecondAddressBiggerThanFirstAddressSuccess() {
         ipAddressRanger = new IpAddressRanger("10.10.10.10", "10.12.10.10");
-        Assert.assertNotNull(ipAddressRanger);
+        assertNotNull(ipAddressRanger);
     }
 
     @Test
     public void initializeRangeFirstAddressBiggerThanSecondAddressSuccess() {
         ipAddressRanger = new IpAddressRanger("10.11.10.10", "10.10.10.10");
-        Assert.assertNotNull(ipAddressRanger);
+        assertNotNull(ipAddressRanger);
     }
 
     @Test
@@ -36,7 +37,7 @@ public class IpAddressRangerTest {
             result.add(address);
         }
 
-        Assert.assertArrayEquals(result.toArray(), expected);
+        assertArrayEquals(result.toArray(), expected);
 
 
         expected = new String[]{"1.1.3.1",
@@ -50,7 +51,7 @@ public class IpAddressRangerTest {
             result.add(address);
         }
 
-        Assert.assertArrayEquals(result.toArray(), expected);
+        assertArrayEquals(result.toArray(), expected);
 
 
         expected = new String[]{"1.1.2.2",
@@ -72,7 +73,7 @@ public class IpAddressRangerTest {
             result.add(address);
         }
 
-        Assert.assertArrayEquals(result.toArray(), expected);
+        assertArrayEquals(result.toArray(), expected);
 
 
         expected = new String[]{"0.2.2.2",
@@ -88,6 +89,6 @@ public class IpAddressRangerTest {
             result.add(address);
         }
 
-        Assert.assertArrayEquals(result.toArray(), expected);
+        assertArrayEquals(result.toArray(), expected);
     }
 }

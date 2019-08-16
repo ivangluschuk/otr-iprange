@@ -1,72 +1,80 @@
 package iprange;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Iterator;
 import java.util.stream.Collectors;
 
-final class IpAddressRanger {
+final class IpAddressRanger implements Iterable<String> {
 
-    private int[] upRangeIpAddress;
-    private int[] downRangeIpAddress;
+    private final int[] upRangeIpAddress;
+    private final int[] downRangeIpAddress;
+    private final int rangeCounter;
 
     IpAddressRanger(final String firstIpAddress, final String secondIpAddress) {
 
-        var result = new IpAddressValidator().validateRange(firstIpAddress, secondIpAddress);
+        final var shouldReverse = IpAddressValidator.validateRange(firstIpAddress, secondIpAddress);
 
-        if (result == 1) {
+        if (shouldReverse) {
             upRangeIpAddress = Arrays.stream(firstIpAddress.split("\\.")).mapToInt(Integer::parseInt).toArray();
             downRangeIpAddress = Arrays.stream(secondIpAddress.split("\\.")).mapToInt(Integer::parseInt).toArray();
         } else {
             upRangeIpAddress = Arrays.stream(secondIpAddress.split("\\.")).mapToInt(Integer::parseInt).toArray();
             downRangeIpAddress = Arrays.stream(firstIpAddress.split("\\.")).mapToInt(Integer::parseInt).toArray();
         }
+
+        rangeCounter = calculateRange();
     }
 
-    String[] getRange() {
+    private int calculateRange() {
+        int range = 1;
 
-        var ipAddressRange = getIpAddressesRange(downRangeIpAddress, upRangeIpAddress);
+        for (int i = 0; i <= 3; i++) {
+            range *= upRangeIpAddress[i] - downRangeIpAddress[i] + 1;
+        }
 
-        return formatIpAddresses(ipAddressRange);
+        return range - 2;
     }
 
-    private ArrayList<int[]> getIpAddressesRange(final int[] downRangeIpAddress, final int[] upRangeIpAddress) {
+    private String formatIpAddresses(final int[] addresses) {
+        return Arrays.stream(addresses)
+                .mapToObj(String::valueOf)
+                .collect(Collectors.joining("."));
+    }
 
-        var initialDownRangeIpAddress = downRangeIpAddress.clone();
-        var ipAddressRange = new ArrayList<int[]>();
+    @Override
+    public Iterator<String> iterator() {
+        return new Iterator<>() {
 
-        for (int offset = 3; offset >= 0; offset--) {
+            private final int[] upRangeIpAddressInner = upRangeIpAddress.clone();
+            private final int[] downRangeIpAddressInner = downRangeIpAddress.clone();
+            private final int[] initialDownRangeIpAddressInner = downRangeIpAddress.clone();
+            private int rangeCounterInner = rangeCounter;
 
-            if (offset < 3) {
-               System.arraycopy(initialDownRangeIpAddress, offset + 1, downRangeIpAddress, offset + 1, 3 - offset);
+            @Override
+            public boolean hasNext() {
+                return rangeCounterInner > 0;
             }
 
-            if (downRangeIpAddress[offset] < upRangeIpAddress[offset]) {
-                if (initialDownRangeIpAddress[offset] < upRangeIpAddress[offset]) {
-                    downRangeIpAddress[offset] = downRangeIpAddress[offset] + 1;
-                    ipAddressRange.add(downRangeIpAddress.clone());
+            @Override
+            public String next() {
+                for (int offset = 3; offset >= 0; offset--) {
+
+                    if (offset < 3) {
+                        System.arraycopy(initialDownRangeIpAddressInner, offset + 1, downRangeIpAddressInner, offset + 1, 3 - offset);
+                    }
+
+                    if (downRangeIpAddressInner[offset] < upRangeIpAddressInner[offset]) {
+                        if (initialDownRangeIpAddressInner[offset] < upRangeIpAddressInner[offset]) {
+                            downRangeIpAddressInner[offset] = downRangeIpAddressInner[offset] + 1;
+                            rangeCounterInner--;
+
+                            return formatIpAddresses(downRangeIpAddressInner.clone());
+                        }
+                    }
                 }
 
-                offset = 4;
+                return "";
             }
-        }
-
-        ipAddressRange.remove(ipAddressRange.size() - 1);
-        return ipAddressRange;
-    }
-
-    private String[] formatIpAddresses(List<int[]> addresses) {
-
-        var formattedAddresses = new ArrayList<String>();
-
-        for (int[] address : addresses) {
-            String formattedAddress = Arrays.stream(address)
-                    .mapToObj(String::valueOf)
-                    .collect(Collectors.joining("."));
-
-            formattedAddresses.add(formattedAddress);
-        }
-
-        return formattedAddresses.toArray(new String[0]);
+        };
     }
 }

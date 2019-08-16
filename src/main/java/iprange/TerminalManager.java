@@ -6,58 +6,56 @@ final class TerminalManager {
 
     private String firstIpAddress;
     private String secondIpAddress;
-    private IpAddressValidator ipAddressValidator = new IpAddressValidator();
 
     void start() {
-        if (firstIpAddress == null) getFirstIpAddress();
-        if (secondIpAddress == null) getSecondIpAddress();
+        while (firstIpAddress == null) getFirstIpAddress();
+        while (secondIpAddress == null) getSecondIpAddress();
         printIpAddresses();
     }
 
     private void getFirstIpAddress() {
 
-        System.out.println("\nTo exit the program enter \"exit\"");
+        System.out.println("\nTo exit the program enter \"exit\"\n");
         System.out.println("Enter the first ip address:");
         System.out.print(">");
 
         Scanner scanner = new Scanner(System.in);
-        var input = scanner.nextLine();
+        final var input = scanner.nextLine();
 
         if (input.equals("exit")) System.exit(0);
 
-        if (ipAddressValidator.validate(input)) {
+        if (IpAddressValidator.validate(input)) {
             firstIpAddress = input;
         } else {
             System.out.println("The ip address has a wrong format: " + input);
-            start();
         }
     }
 
     private void getSecondIpAddress() {
 
-        System.out.println("\nTo exit the program enter \"exit\"");
+        System.out.println("\nTo exit the program enter \"exit\"\n");
         System.out.println("Enter the second ip address:");
         System.out.print(">");
 
         Scanner scanner = new Scanner(System.in);
-        var input = scanner.nextLine();
+        final var input = scanner.nextLine();
 
         if (input.equals("exit")) System.exit(0);
 
-        if (ipAddressValidator.validate(input)) {
+        if (IpAddressValidator.validate(input)) {
             secondIpAddress = input;
         } else {
             System.out.println("The ip address has a wrong format: " + input);
-            start();
         }
     }
 
     private void printIpAddresses() {
         try {
             IpAddressRanger ipAddressRanger = new IpAddressRanger(firstIpAddress, secondIpAddress);
-            String[] addresses = ipAddressRanger.getRange();
 
-            for (String address : addresses) {
+            System.out.println("\nAvailable range between " + firstIpAddress + " and " + secondIpAddress + ":\n");
+
+            for (String address : ipAddressRanger) {
                 System.out.println(address);
             }
         } catch (IllegalArgumentException e) {

@@ -3,6 +3,8 @@ package iprange;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 public class IpAddressRangerTest {
 
     private static IpAddressRanger ipAddressRanger;
@@ -68,18 +70,27 @@ public class IpAddressRangerTest {
                             "1.1.1.6"};
 
         ipAddressRanger = new IpAddressRanger("1.1.1.1", "1.1.1.7");
-        var result = ipAddressRanger.getRange();
+        ArrayList<String> result = new ArrayList<>();
 
-        Assert.assertArrayEquals(result, expected);
+        for (String address : ipAddressRanger) {
+            result.add(address);
+        }
+
+        Assert.assertArrayEquals(result.toArray(), expected);
 
 
         expected = new String[]{"1.1.3.1",
                                 "1.1.4.1"};
 
         ipAddressRanger = new IpAddressRanger("1.1.5.1", "1.1.2.1");
-        result = ipAddressRanger.getRange();
 
-        Assert.assertArrayEquals(result, expected);
+        result = new ArrayList<>();
+
+        for (String address : ipAddressRanger) {
+            result.add(address);
+        }
+
+        Assert.assertArrayEquals(result.toArray(), expected);
 
 
         expected = new String[]{"1.1.2.2",
@@ -94,9 +105,14 @@ public class IpAddressRangerTest {
                                 "1.1.5.2"};
 
         ipAddressRanger = new IpAddressRanger("1.1.5.3", "1.1.2.1");
-        result = ipAddressRanger.getRange();
 
-        Assert.assertArrayEquals(result, expected);
+        result = new ArrayList<>();
+
+        for (String address : ipAddressRanger) {
+            result.add(address);
+        }
+
+        Assert.assertArrayEquals(result.toArray(), expected);
 
 
         expected = new String[]{"0.2.2.2",
@@ -105,8 +121,13 @@ public class IpAddressRangerTest {
                                 "1.2.2.2"};
 
         ipAddressRanger = new IpAddressRanger("1.2.2.3", "0.2.2.1");
-        result = ipAddressRanger.getRange();
 
-        Assert.assertArrayEquals(result, expected);
+        result = new ArrayList<>();
+
+        for (String address : ipAddressRanger) {
+            result.add(address);
+        }
+
+        Assert.assertArrayEquals(result.toArray(), expected);
     }
 }

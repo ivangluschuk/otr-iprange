@@ -21,7 +21,7 @@ final class IpAddressValidator {
         return matcher.matches();
     }
 
-    static boolean validateRange(final String firstIpAddress, final String secondIpAddress) {
+    static boolean shouldReverseOrThrowIfInvalid(final String firstIpAddress, final String secondIpAddress) {
 
         if (!validate(firstIpAddress)) {
             throw new IllegalArgumentException("The ip address has a wrong format: " + firstIpAddress);
@@ -31,8 +31,8 @@ final class IpAddressValidator {
             throw new IllegalArgumentException("The ip address has a wrong format: " + secondIpAddress);
         }
 
-        if (firstIpAddress.trim().equals(secondIpAddress)) {
-            throw new IllegalArgumentException("There is no range between these addresses");
+        if (firstIpAddress.trim().equals(secondIpAddress.trim())) {
+            throw new IllegalArgumentException("Addresses are equal");
         }
 
         final int[] firstIpAddressOctets =
@@ -51,7 +51,6 @@ final class IpAddressValidator {
                 firstIpAddressOctets[1] >= secondIpAddressOctets[1] &&
                 firstIpAddressOctets[2] >= secondIpAddressOctets[2] &&
                 firstIpAddressOctets[3] >= secondIpAddressOctets[3]) {
-
 
             return true;
         } else {

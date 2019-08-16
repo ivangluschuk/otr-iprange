@@ -1,7 +1,6 @@
 package iprange;
 
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class IpAddressValidatorTest {
@@ -123,5 +122,45 @@ public class IpAddressValidatorTest {
         var result = IpAddressValidator.validate("255.255.255.256");
 
         Assert.assertFalse(result);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void validateRangeSameAddressesFail() {
+        IpAddressValidator.shouldReverseOrThrowIfInvalid("10.11.10.10", "10.11.10.10");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void validateRangeWrongRangeAddressesFail() {
+        IpAddressValidator.shouldReverseOrThrowIfInvalid("10.12.10.10", "10.11.11.10");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void validateRangeWrongFirstAddressesFormatOctetNumberStartWithZeroFail() {
+        IpAddressValidator.shouldReverseOrThrowIfInvalid("02.12.10.10", "10.11.11.10");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void validateRangeWrongSecondAddressesFormatOctetNumberStartWithZeroFail() {
+        IpAddressValidator.shouldReverseOrThrowIfInvalid("2.12.10.10", "10.01.11.10");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void validateRangeWrongAddressesFormatLetterSignInFirstOctetFail() {
+        IpAddressValidator.shouldReverseOrThrowIfInvalid("10.12.x0.10", "10.11.11.10");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void validateRangeWrongAddressesFormatLetterSignInSecondOctetFail() {
+        IpAddressValidator.shouldReverseOrThrowIfInvalid("10.12.10.10", "10.11.j1.10");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void validateRangeWrongAddressesFormatMoreThanFourOctetsInFirstAddressFail() {
+        IpAddressValidator.shouldReverseOrThrowIfInvalid("10.12.10.10.10", "10.11.21.10");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void validateRangeWrongAddressesFormatMoreThanFourOctetsInSecondAddressFail() {
+        IpAddressValidator.shouldReverseOrThrowIfInvalid("10.12.10.10", "10.10.11.11.10");
     }
 }

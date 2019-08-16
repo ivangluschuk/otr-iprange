@@ -4,19 +4,26 @@ import java.util.Scanner;
 
 final class TerminalManager {
 
-    private String firstIpAddress;
-    private String secondIpAddress;
+    private StringBuilder firstIpAddress = new StringBuilder();
+    private StringBuilder secondIpAddress = new StringBuilder();
 
     void start() {
-        while (firstIpAddress == null) getFirstIpAddress();
-        while (secondIpAddress == null) getSecondIpAddress();
-        printIpAddresses();
+
+        do {
+            getAddress(firstIpAddress, "the first");
+        } while (firstIpAddress.length() == 0);
+
+        do {
+            getAddress(secondIpAddress, "the second");
+        } while (secondIpAddress.length() == 0);
+
+        printIpAddresses(firstIpAddress, secondIpAddress);
     }
 
-    private void getFirstIpAddress() {
+    private void getAddress(StringBuilder address, final String count) {
 
         System.out.println("\nTo exit the program enter \"exit\"\n");
-        System.out.println("Enter the first ip address:");
+        System.out.println("Enter the " + count +  " ip address:");
         System.out.print(">");
 
         Scanner scanner = new Scanner(System.in);
@@ -25,33 +32,15 @@ final class TerminalManager {
         if (input.equals("exit")) System.exit(0);
 
         if (IpAddressValidator.validate(input)) {
-            firstIpAddress = input;
+            address.append(input);
         } else {
             System.out.println("The ip address has a wrong format: " + input);
         }
     }
 
-    private void getSecondIpAddress() {
-
-        System.out.println("\nTo exit the program enter \"exit\"\n");
-        System.out.println("Enter the second ip address:");
-        System.out.print(">");
-
-        Scanner scanner = new Scanner(System.in);
-        final var input = scanner.nextLine();
-
-        if (input.equals("exit")) System.exit(0);
-
-        if (IpAddressValidator.validate(input)) {
-            secondIpAddress = input;
-        } else {
-            System.out.println("The ip address has a wrong format: " + input);
-        }
-    }
-
-    private void printIpAddresses() {
+    private void printIpAddresses(StringBuilder firstIpAddress, StringBuilder secondIpAddress) {
         try {
-            IpAddressRanger ipAddressRanger = new IpAddressRanger(firstIpAddress, secondIpAddress);
+            IpAddressRanger ipAddressRanger = new IpAddressRanger(firstIpAddress.toString(), secondIpAddress.toString());
 
             System.out.println("\nAvailable range between " + firstIpAddress + " and " + secondIpAddress + ":\n");
 
@@ -60,8 +49,8 @@ final class TerminalManager {
             }
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
-            firstIpAddress = null;
-            secondIpAddress = null;
+            firstIpAddress.setLength(0);
+            secondIpAddress.setLength(0);
             start();
         }
     }

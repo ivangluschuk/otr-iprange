@@ -12,7 +12,7 @@ final class IpAddressRanger implements Iterable<String> {
 
     IpAddressRanger(final String firstIpAddress, final String secondIpAddress) {
 
-        final var shouldReverse = IpAddressValidator.validateRange(firstIpAddress, secondIpAddress);
+        final var shouldReverse = IpAddressValidator.shouldReverseOrThrowIfInvalid(firstIpAddress, secondIpAddress);
 
         if (shouldReverse) {
             upRangeIpAddress = Arrays.stream(firstIpAddress.split("\\.")).mapToInt(Integer::parseInt).toArray();
@@ -73,7 +73,7 @@ final class IpAddressRanger implements Iterable<String> {
                     }
                 }
 
-                return "";
+                throw new IllegalStateException();
             }
         };
     }

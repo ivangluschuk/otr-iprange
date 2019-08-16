@@ -15,7 +15,11 @@ final class TerminalManager {
 
     private void getFirstIpAddress() {
 
+<<<<<<< HEAD
         System.out.println("\nTo exit the program enter \"exit\"\n");
+=======
+        System.out.println("To exit the program enter \"exit\"");
+>>>>>>> c09d69a9619b744cf0bbb5a10fc361a072861241
         System.out.println("Enter the first ip address:");
         System.out.print(">");
 
@@ -33,7 +37,11 @@ final class TerminalManager {
 
     private void getSecondIpAddress() {
 
+<<<<<<< HEAD
         System.out.println("\nTo exit the program enter \"exit\"\n");
+=======
+        System.out.println("To exit the program enter \"exit\"");
+>>>>>>> c09d69a9619b744cf0bbb5a10fc361a072861241
         System.out.println("Enter the second ip address:");
         System.out.print(">");
 
